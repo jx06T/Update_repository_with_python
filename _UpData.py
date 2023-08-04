@@ -44,7 +44,7 @@ def CheckUpdata():
         V = V[0]
     else:
         return False
-    with open("version_record.text", "rt",encoding='UTF-8') as f:
+    with open("_version_record.text", "rt",encoding='UTF-8') as f:
         record = f.read()
         lastV = re.findall(rule,record) 
         if len(lastV)>0 and not lastV[0]==V:
@@ -54,8 +54,8 @@ def CheckUpdata():
         else :
             return False
         
-    with open("version_record.text", "w",encoding='UTF-8') as f:
-        # f.write("version-"+V)
+    with open("_version_record.text", "w",encoding='UTF-8') as f:
+        f.write("version-"+V)
         return True
 
 def save():
