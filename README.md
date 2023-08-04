@@ -1,5 +1,6 @@
-# PetPal__ChromeExtensions
+# ABCDE
 ---
+## *version-V1.4*
 ## 簡介&功能
 河豚擴充
 1. 增加河豚
