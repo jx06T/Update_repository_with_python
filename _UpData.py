@@ -84,21 +84,17 @@ def save():
     print(_tmp_file)
     _tmp_file.write(data)  # byte字节数据写入临时文件
     zf = zipfile.ZipFile(_tmp_file, mode='r')
-    oldNames = []
-
     for names in zf.namelist():
-        oldNames.append(names)
         f = zf.extract(names, './')  # 解压到zip目录文件下
         print("add ==>>", f)
     zf.close()
 
-    for name in oldNames:
-        NewName = name.replace(R_PATH+"/","")
+    for name in os.listdir(os.path.join(current_path,R_PATH)):
+        NewName = name
+        name = os.path.join(R_PATH,name)
         print(NewName,"==>>",name)
-        if name == '':
-            continue
         os.rename(name, NewName)
-
+    
     shutil.rmtree(R_PATH)
 
 def UpData():
