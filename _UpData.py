@@ -74,39 +74,32 @@ def save():
 
     for file_name in os.listdir(current_path):
         destination = os.path.join(new_folder, file_name)
-        print(file_name,destination)
+        print(file_name,"==>>",destination)
         if file_name=="_temp" or file_name=="_version_record.text":
             continue  
         shutil.move(file_name, destination)
 
     url, data = get_data()  # data为byte字节
- 
     _tmp_file = tempfile.TemporaryFile()  # 创建临时文件
     print(_tmp_file)
     _tmp_file.write(data)  # byte字节数据写入临时文件
     zf = zipfile.ZipFile(_tmp_file, mode='r')
     oldNames = []
+
     for names in zf.namelist():
         oldNames.append(names)
         f = zf.extract(names, './')  # 解压到zip目录文件下
-        print(f)
+        print("add ==>>", f)
     zf.close()
 
     for name in oldNames:
         NewName = name.replace(R_PATH+"/","")
-        print(NewName,name)
-        if os.path.exists(NewName):
-            try:
-                os.remove(NewName)
-            except:
-                continue
-        try:
-            os.rename(name, NewName)
-        except:
-            pass
+        print(NewName,"==>>",name)
+        if name == '':
+            continue
+        os.rename(name, NewName)
 
-    if os.path.exists(R_PATH):
-        shutil.rmtree(R_PATH)
+    shutil.rmtree(R_PATH)
 
 def UpData():
     if CheckUpdata():
