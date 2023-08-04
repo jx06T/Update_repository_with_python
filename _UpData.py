@@ -4,11 +4,10 @@ import tempfile
 import re
 import os
 import shutil
-import win32api
-import win32con
-import win32file
-# win32file.CopyFile ("移動copy.py", "新檔名", 1)
-# win32file.DeleteFile ("移動copy.py")
+# import win32api
+# import win32con
+# import win32file
+
 
 def get_data():
     url = "https://codeload.github.com/jx06T/Update_repository_with_python/zip/refs/heads/main"
@@ -76,7 +75,7 @@ def save():
     for file_name in os.listdir(current_path):
         destination = os.path.join(new_folder, file_name)
         print(file_name,destination)
-        if file_name=="_temp" :
+        if file_name=="_temp" or file_name=="_version_record.text":
             continue  
         shutil.move(file_name, destination)
 
@@ -108,7 +107,7 @@ def save():
 
     if os.path.exists(R_PATH):
         shutil.rmtree(R_PATH)
-        
+
 def UpData():
     if CheckUpdata():
         save()
