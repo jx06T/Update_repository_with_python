@@ -1,9 +1,12 @@
 import requests
 import zipfile
 import tempfile
+import re
+import os
+    # f = os.open('demo/demo.txt', os.O_RDWR|os.O_CREAT)   # 建立一個可讀寫的 demo.txt
 
 
-  
+
 def get_data():
     url = "https://codeload.github.com/jx06T/FindBook3/zip/refs/heads/main"
     payload = {}
@@ -28,18 +31,48 @@ def get_data():
     response = requests.request("GET", url, headers=headers, data=payload)
     return url, response.content
  
- 
+
+
+def CheckUpdata():
+    url = "https://github.com/jx06T/Update_repository_with_python/blob/main/README.md"
+
+    payload = {}
+    headers = {
+    'Cookie': '_gh_sess=yrhsh%2FQQ7yZCSPGnCn3ao8dMBnxcWC3hwuUi%2F79CN8Xxk3KNXphs%2FEMUpRUwHUdDWW8Z%2BBkc1MKnDRGt7%2Bx1OafPzUHdaRtKjIH5Qaz0F54xRqu2ER3vNqfeNrF0Emkpq2wHI0DySfQ3VvawP9mhVXLYzZCXnMQHgNIXiivtgK3NnjxmWaQPy4KEGgGev3PIWEvvdQqsOY4rkRREmidY6iI4kQ5SF801JKsRo5vt8EAGc6VFd3b5Mpbww9ZfR%2B8v0tUCHsj%2BpKF5724OPAv37w%3D%3D--H55d0j9%2FM3Ktix1z--VBcsToN38iwKRPOoTrTMMA%3D%3D; _octo=GH1.1.1270137357.1691156003; logged_in=no'
+    }
+    response = requests.request("GET", url, headers=headers, data=payload)
+    rule = r"version-(V[\d|'.']*)"
+    V =  re.findall(rule,response.text)
+    if len(V)>0:
+        V = V[0]
+    print(V)
+    with open("version_record", "r") as f:
+        lastV =  re.findall(rule,f.read()) 
+        if len(lastV)>0 and not lastV[0]==V:
+            print(lastV[0])
+            print("!!")
+        if len(lastV)==0:
+            f.write("version-"+V)
+            print("!!!")
+
+        f.close()
+
+
 if __name__ == '__main__':
-    url, data = get_data()  # data为byte字节
+
+
+    CheckUpdata()
+
+    # url, data = get_data()  # data为byte字节
  
-    _tmp_file = tempfile.TemporaryFile()  # 创建临时文件
-    print(_tmp_file)
+    # _tmp_file = tempfile.TemporaryFile()  # 创建临时文件
+    # print(_tmp_file)
  
-    _tmp_file.write(data)  # byte字节数据写入临时文件
+    # _tmp_file.write(data)  # byte字节数据写入临时文件
  
-    zf = zipfile.ZipFile(_tmp_file, mode='r')
-    for names in zf.namelist():
-        f = zf.extract(names, './')  # 解压到zip目录文件下
-        print(f)
+    # zf = zipfile.ZipFile(_tmp_file, mode='r')
+    # for names in zf.namelist():
+    #     f = zf.extract(names, './')  # 解压到zip目录文件下
+    #     print(f)
  
-    zf.close()
+    # zf.close()
