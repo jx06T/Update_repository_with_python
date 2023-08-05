@@ -36,7 +36,7 @@ def CheckUpdata():
     if len(V)>0:
         NewVersion = V[0]
     else:
-        return False
+        return False,False
     
     if os.path.isfile(VERSION_FILE_NAME):
         with open(VERSION_FILE_NAME, "rt",encoding='UTF-8') as f:
@@ -45,14 +45,13 @@ def CheckUpdata():
             LastVersion = lastV[1]
             lastV.append(None)
             if  lastV[0]==NewVersion:
-                return False    
+                return False,record
 
     return True,record
 
-def UpDataSuccess(record):
-    global NewVersion
+def UpDataSuccess(record,version):
     with open(VERSION_FILE_NAME, "w",encoding='UTF-8') as f:
-        f.write("version-"+NewVersion+'\n'+record)
+        f.write("version-"+version+'\n'+record)
 
 def SaveNewData():
     url, data = get_data()  # data为byte字节
@@ -81,17 +80,20 @@ def MoveData(_to):
         os.mkdir(_to)
     for file_name in os.listdir(current_path):
         destination = os.path.join(_to, file_name)
-        print(file_name,"==>>",destination)
         if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME:
             continue  
+        print(file_name,"==>>",destination)
         shutil.move(file_name, destination)
 
 def DeleteData(name):
-    for file_name in os.path.join(os.listdir(current_path),name):
-        print("xx ==>> ",file_name)
+    for file_name in os.listdir(os.path.join(current_path,name)):
         if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME:
             continue  
-        shutil.rmtree(file_name)
+        print("xx ==>> ",file_name)
+        if os.path.isdir(file_name):
+            shutil.rmtree(file_name)
+        else:
+            os.remove(file_name)
 
 if __name__ == '__main__':
     CanUpdata,record = CheckUpdata()
@@ -102,14 +104,18 @@ if __name__ == '__main__':
             SaveNewData()
             MoveDataBack(R_PATH)
             messagebox.showinfo('Update Tools', '已更新至最新版('+NewVersion+')')
-            UpDataSuccess(record)
+            UpDataSuccess(record,NewVersion)
         else:
             print("Not Now UpData")
     else:
-        result = messagebox.askokcancel('Update Tools', "已經是最新版("+NewVersion+")\n\n是否要還原更新？(to "+LastVersion+")")
-        if result:
-            DeleteData("./")
-            MoveDataBack(TEMP_FILE_NAME)
-            messagebox.showinfo('Update Tools', '已更新至最新版('+NewVersion+')')
+        if record == False:
+            messagebox.showwarning('Update Tools', '無法確認是否有更新版本')
         else:
-            print("Nothing")
+            result = messagebox.askokcancel('Update Tools', "已經是最新版("+NewVersion+")\n\n是否要還原更新？(to "+LastVersion+")")
+            if result:
+                DeleteData(current_path)
+                MoveDataBack(TEMP_FILE_NAME)
+                messagebox.showinfo('Update Tools', '已還原至舊版('+LastVersion+')')
+                UpDataSuccess(record,LastVersion)
+            else:
+                print("Nothing")
