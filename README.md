@@ -18,7 +18,7 @@ Update Tools
 2.更改以下變數：
 - R_PATH = "Update_repository_with_python-main" #改為你的專案下載為Zip後的檔名
 - DOWNLOAD_URL= "https://codeload.github.com/jx06T/Update_repository_with_python/zip/refs/heads/main" #改為你的專案下載Zip的連結 **2*
-- CHECK_URL= "https://github.com/jx06T/Update_repository_with_python/blob/main/README.md"#改為你的專案 **README.md** 連結
+- CHECK_URL= "https://github.com/jx06T/Update_repository_with_python/blob/main/README.md" #改為你的專案 **README.md** 連結
 
 3.在 **README.md** 中添加 **version-V + {版本號}**　**版本號(由任意數量的「數字」或「.」組成)*
 
