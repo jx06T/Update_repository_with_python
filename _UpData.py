@@ -56,7 +56,7 @@ def UpDataSuccess(record,version):
 def SaveNewData():
     url, data = get_data()  # data为byte字节
     _tmp_file = tempfile.TemporaryFile()  # 创建临时文件
-    print(_tmp_file)
+    # print(_tmp_file)
     _tmp_file.write(data)  # byte字节数据写入临时文件
     zf = zipfile.ZipFile(_tmp_file, mode='r')
     for names in zf.namelist():
@@ -68,7 +68,7 @@ def MoveDataBack(_from):
     for name in os.listdir(os.path.join(current_path,_from)):
         NewName = name
         name = os.path.join(_from,name)
-        print("move => ",name)
+        # print("move => ",name)
         os.rename(name, NewName)
     shutil.rmtree(_from)
 
@@ -82,7 +82,7 @@ def MoveData(_to):
         destination = os.path.join(_to, file_name)
         if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME:
             continue  
-        print("move => ",file_name)
+        # print("move => ",file_name)
         shutil.move(file_name, destination)
 
 def DeleteData(name):
@@ -106,7 +106,8 @@ if __name__ == '__main__':
             messagebox.showinfo('Update Tools', '已更新至最新版('+NewVersion+')')
             UpDataSuccess(record,NewVersion)
         else:
-            print("Not Now UpData")
+            # print("Not Now UpData")
+            pass
     else:
         if record == False:
             messagebox.showwarning('Update Tools', '無法確認是否有更新版本')
@@ -118,4 +119,5 @@ if __name__ == '__main__':
                 messagebox.showinfo('Update Tools', '已還原至舊版('+LastVersion+')')
                 UpDataSuccess(record,LastVersion)
             else:
-                print("Nothing")
+                # print("Nothing")
+                pass
