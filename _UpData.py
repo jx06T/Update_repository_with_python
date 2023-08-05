@@ -46,8 +46,8 @@ def CheckUpdata():
         with open(VERSION_FILE_NAME, "rt",encoding='UTF-8') as f:
             record = f.read()
             lastV = re.findall(rule,record) 
-            lastV.append(None)
-            lastV.append(None)
+            lastV.append(False)
+            lastV.append(False)
             LastVersion = lastV[1]
             if  lastV[0]==NewVersion:
                 return False,record
@@ -117,15 +117,15 @@ if __name__ == '__main__':
         if record == False:
             messagebox.showwarning('Update Tools', '無法確認是否有更新版本')
         else:
-            if os.path.exists(TEMP_FILE_NAME):
-                result = messagebox.askokcancel('Update Tools', "已經是最新版("+NewVersion+")\n\n是否要還原更新？(to "+LastVersion+")")
+            if os.path.exists(TEMP_FILE_NAME) and not LastVersion == False:
+                result = messagebox.askokcancel('Update Tools', "已經是最新版本("+NewVersion+")\n\n是否要還原更新？(to "+LastVersion+")")
                 if result:
                     DeleteData(current_path)
                     MoveDataBack(TEMP_FILE_NAME)
-                    messagebox.showinfo('Update Tools', '已還原至舊版('+LastVersion+')')
+                    messagebox.showinfo('Update Tools', '已還原至舊版本('+LastVersion+')')
                     UpDataSuccess(record,LastVersion)
                 else:   
                     # print("Nothing")
                     pass
             else:
-                messagebox.showinfo('Update Tools', '已經是最新且本地無版本可還原')
+                messagebox.showinfo('Update Tools', '已經是最新版本且本地無版本可還原')
