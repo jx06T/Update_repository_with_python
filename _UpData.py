@@ -6,6 +6,11 @@ import os
 import shutil
 import tkinter as tk
 from tkinter import messagebox
+import ctypes
+
+PROCESS_PER_MONITOR_DPI_AWARE = 2  
+ctypes.windll.shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
+
 
 R_PATH = "Update_repository_with_python-main"
 DOWNLOAD_URL= "https://codeload.github.com/jx06T/Update_repository_with_python/zip/refs/heads/main"
@@ -112,12 +117,15 @@ if __name__ == '__main__':
         if record == False:
             messagebox.showwarning('Update Tools', '無法確認是否有更新版本')
         else:
-            result = messagebox.askokcancel('Update Tools', "已經是最新版("+NewVersion+")\n\n是否要還原更新？(to "+LastVersion+")")
-            if result:
-                DeleteData(current_path)
-                MoveDataBack(TEMP_FILE_NAME)
-                messagebox.showinfo('Update Tools', '已還原至舊版('+LastVersion+')')
-                UpDataSuccess(record,LastVersion)
+            if os.path.exists(TEMP_FILE_NAME):
+                result = messagebox.askokcancel('Update Tools', "已經是最新版("+NewVersion+")\n\n是否要還原更新？(to "+LastVersion+")")
+                if result:
+                    DeleteData(current_path)
+                    MoveDataBack(TEMP_FILE_NAME)
+                    messagebox.showinfo('Update Tools', '已還原至舊版('+LastVersion+')')
+                    UpDataSuccess(record,LastVersion)
+                else:   
+                    # print("Nothing")
+                    pass
             else:
-                # print("Nothing")
-                pass
+                messagebox.showinfo('Update Tools', '已經是最新且本地無版本可還原')
