@@ -46,8 +46,9 @@ def CheckUpdata():
         with open(VERSION_FILE_NAME, "rt",encoding='UTF-8') as f:
             record = f.read()
             lastV = re.findall(rule,record) 
-            LastVersion = lastV[1]
             lastV.append(None)
+            lastV.append(None)
+            LastVersion = lastV[1]
             if  lastV[0]==NewVersion:
                 return False,record
 
