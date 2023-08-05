@@ -61,14 +61,14 @@ def SaveNewData():
     zf = zipfile.ZipFile(_tmp_file, mode='r')
     for names in zf.namelist():
         f = zf.extract(names, './')  # 解压到zip目录文件下
-        print("++ ==>>", f)
+        print("add =>", f)
     zf.close()
 
 def MoveDataBack(_from):
     for name in os.listdir(os.path.join(current_path,_from)):
         NewName = name
         name = os.path.join(_from,name)
-        print(NewName,"==>>",name)
+        print("move => ",name)
         os.rename(name, NewName)
     shutil.rmtree(_from)
 
@@ -82,14 +82,14 @@ def MoveData(_to):
         destination = os.path.join(_to, file_name)
         if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME:
             continue  
-        print(file_name,"==>>",destination)
+        print("move => ",file_name)
         shutil.move(file_name, destination)
 
 def DeleteData(name):
     for file_name in os.listdir(os.path.join(current_path,name)):
         if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME:
             continue  
-        print("xx ==>> ",file_name)
+        print("delete => ",file_name)
         if os.path.isdir(file_name):
             shutil.rmtree(file_name)
         else:
