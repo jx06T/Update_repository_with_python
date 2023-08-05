@@ -8,15 +8,14 @@ import tkinter as tk
 from tkinter import messagebox
 import ctypes
 
-PROCESS_PER_MONITOR_DPI_AWARE = 2  
-ctypes.windll.shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
-
-
 R_PATH = "Update_repository_with_python-main"
 DOWNLOAD_URL= "https://codeload.github.com/jx06T/Update_repository_with_python/zip/refs/heads/main"
 CHECK_URL= "https://github.com/jx06T/Update_repository_with_python/blob/main/README.md"
 VERSION_FILE_NAME = "_version.text"
 TEMP_FILE_NAME = "_temp"
+
+PROCESS_PER_MONITOR_DPI_AWARE = 2  
+ctypes.windll.shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
 current_path = os.path.dirname(os.path.abspath(__file__)) 
 NewVersion = None
 LastVersion = None
@@ -42,7 +41,7 @@ def CheckUpdata():
         NewVersion = V[0]
     else:
         return False,False
-    
+    record = ""
     if os.path.isfile(VERSION_FILE_NAME):
         with open(VERSION_FILE_NAME, "rt",encoding='UTF-8') as f:
             record = f.read()
