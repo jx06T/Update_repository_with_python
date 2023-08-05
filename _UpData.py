@@ -14,6 +14,7 @@ VERSION_FILE_NAME = "_version.text"
 TEMP_FILE_NAME = "_temp"
 current_path = os.path.dirname(os.path.abspath(__file__)) 
 NewVersion = None
+LastVersion = None
 
 def get_data():
     payload = {}
@@ -26,6 +27,7 @@ def get_data():
 
 def CheckUpdata():
     global NewVersion
+    global LastVersion
     payload = {}
     headers = {}
     response = requests.request("GET", CHECK_URL, headers=headers, data=payload)
@@ -40,16 +42,17 @@ def CheckUpdata():
         with open(VERSION_FILE_NAME, "rt",encoding='UTF-8') as f:
             record = f.read()
             lastV = re.findall(rule,record) 
-            if len(lastV)>0 :
-                if  lastV[0]==NewVersion:
-                    return False    
+            LastVersion = lastV[1]
+            lastV.append(None)
+            if  lastV[0]==NewVersion:
+                return False    
 
-    return True
+    return True,record
 
-def UpDataSuccess():
+def UpDataSuccess(record):
     global NewVersion
     with open(VERSION_FILE_NAME, "w",encoding='UTF-8') as f:
-        f.write("version-"+NewVersion)
+        f.write("version-"+NewVersion+'\n'+record)
 
 def SaveNewData():
     url, data = get_data()  # data为byte字节
@@ -91,19 +94,22 @@ def DeleteData(name):
         shutil.rmtree(file_name)
 
 if __name__ == '__main__':
-    if CheckUpdata():
-        result = messagebox.askokcancel('Update Tools', "有可用更新("+NewVersion+")\n\n是否更新")
+    CanUpdata,record = CheckUpdata()
+    if CanUpdata:
+        result = messagebox.askokcancel('Update Tools', "有可用更新("+NewVersion+")\n\n是否下載更新？")
         if result:
             MoveData(TEMP_FILE_NAME)
             SaveNewData()
             MoveDataBack(R_PATH)
-            UpDataSuccess()
+            messagebox.showinfo('Update Tools', '已更新至最新版('+NewVersion+')')
+            UpDataSuccess(record)
         else:
             print("Not Now UpData")
     else:
-        # messagebox.showinfo('Update Tools', '已經是最新版')
-        result = messagebox.askokcancel('Update Tools', "已經是最新版("+NewVersion+")\n\n是否要還原更新")
+        result = messagebox.askokcancel('Update Tools', "已經是最新版("+NewVersion+")\n\n是否要還原更新？(to "+LastVersion+")")
         if result:
-            pass
+            DeleteData("./")
+            MoveDataBack(TEMP_FILE_NAME)
+            messagebox.showinfo('Update Tools', '已更新至最新版('+NewVersion+')')
         else:
             print("Nothing")
