@@ -13,6 +13,7 @@ DOWNLOAD_URL= "https://codeload.github.com/jx06T/Update_repository_with_python/z
 CHECK_URL= "https://github.com/jx06T/Update_repository_with_python/blob/main/README.md"
 VERSION_FILE_NAME = "_version.text"
 TEMP_FILE_NAME = "_temp"
+UPDATA_PY_FILE_NAME = "_UpData.py"
 
 PROCESS_PER_MONITOR_DPI_AWARE = 2  
 ctypes.windll.shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
@@ -71,6 +72,8 @@ def SaveNewData():
 
 def MoveDataBack(_from):
     for name in os.listdir(os.path.join(current_path,_from)):
+        if name==UPDATA_PY_FILE_NAME:
+            os.remove(UPDATA_PY_FILE_NAME)
         NewName = name
         name = os.path.join(_from,name)
         # print("move => ",name)
@@ -85,14 +88,14 @@ def MoveData(_to):
         os.mkdir(_to)
     for file_name in os.listdir(current_path):
         destination = os.path.join(_to, file_name)
-        if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME:
+        if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME or file_name==UPDATA_PY_FILE_NAME:
             continue  
         # print("move => ",file_name)
         shutil.move(file_name, destination)
 
 def DeleteData(name):
     for file_name in os.listdir(os.path.join(current_path,name)):
-        if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME:
+        if file_name==TEMP_FILE_NAME or file_name==VERSION_FILE_NAME or file_name==UPDATA_PY_FILE_NAME:
             continue  
         print("delete => ",file_name)
         if os.path.isdir(file_name):
